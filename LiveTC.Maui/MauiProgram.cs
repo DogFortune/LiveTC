@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LiveTC.Maui.ViewModels;
+using LiveTC.Maui.Views;
+using Microsoft.Extensions.Logging;
 
 namespace LiveTC.Maui;
 
@@ -18,7 +20,10 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<MainPageViewModel>();
+        builder.Services.AddTransient<Models.AppContext>();
+        
         return builder.Build();
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace LiveTC.Maui;
+﻿using LiveTC.Maui.Views;
+
+namespace LiveTC.Maui;
 
 public partial class App : Application
 {
-    public App()
+    public App(IServiceProvider services)
     {
         InitializeComponent();
-
-        MainPage = new AppShell();
+        var mainPage = services.GetRequiredService<MainPage>();
+        MainPage = new NavigationPage(mainPage);
     }
 }
