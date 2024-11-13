@@ -1,20 +1,20 @@
 using System.Diagnostics;
+using LiveTC.Maui.Models;
+using LiveTC.Maui.Models.Chapters;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.TinyLinq;
 
 namespace LiveTC.Maui.ViewModels;
 
-using AppContext = LiveTC.Maui.Models.AppContext;
-
 public class MainPageViewModel : ViewModelBase
 {
-    public MainPageViewModel(AppContext model)
+    public MainPageViewModel(AppData model)
     {
         Model = model;
         StopWatch = new Stopwatch();
         ElapsedTime = new TimeSpan();
         DisplayTimeCode = new ReactivePropertySlim<string>("00:00:00:00");
+        ChapterList = model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
 
         var timer = Application.Current.Dispatcher.CreateTimer();
         timer.Interval = TimeSpan.FromMilliseconds(10);
@@ -47,7 +47,7 @@ public class MainPageViewModel : ViewModelBase
     /// <summary>
     ///     モデル
     /// </summary>
-    private AppContext Model { get; }
+    private AppData Model { get; }
 
     private bool IsRunning { get; set; }
 
@@ -75,4 +75,9 @@ public class MainPageViewModel : ViewModelBase
     ///     総合タイム
     /// </summary>
     public ReactivePropertySlim<string> DisplayTimeCode { get; set; }
+
+    /// <summary>
+    ///     チャプターリスト
+    /// </summary>
+    public ReadOnlyReactiveCollection<Chapter> ChapterList { get; }
 }

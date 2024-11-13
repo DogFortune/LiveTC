@@ -16,8 +16,9 @@
             <Label
                 Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
                 TextColor="Black"
-                FontSize="50"
-                HorizontalTextAlignment="Center"/>
+                FontSize="80"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"/>
         </Border>
 
         <!-- 下段の3列レイアウト -->
@@ -30,22 +31,72 @@
 
             <!-- 下段の各列のコンテンツ -->
             <Border Grid.Column="0" Background="LightBlue" Margin="5">
+                <ListView ItemsSource="{Binding ChapterList, Mode=OneWay}"
+                          HasUnevenRows="True"
+                          SeparatorVisibility="Default">
+                    <ListView.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" BackgroundColor="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="チャプター番号" FontAttributes="Bold" />
+                                <Label Grid.Column="1" Text="タイムコード" FontAttributes="Bold" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.HeaderTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Number}" />
+                                    <Label Grid.Column="1" Text="{Binding TimeCode}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+            <Border Grid.Column="1" Background="LightGreen" Margin="5">
+                <StackLayout>
+                    <Button
+                        Text="+"
+                        Command="{Binding StartTimeCode}"
+                        HorizontalOptions="Fill"
+                        Margin="10, 10, 10, 50"
+                        FontSize="30"/>
+                    <Button
+                        Text="-"
+                        Command="{Binding StopTimeCode}"
+                        HorizontalOptions="Fill"
+                        Margin="10, 50"
+                        FontSize="30"/>
+                </StackLayout>
+            </Border>
+
+            <Border Grid.Column="2" Background="LightPink" Margin="5">
                 <StackLayout>
                     <Button
                         Text="Start"
                         Command="{Binding StartTimeCode}"
-                        HorizontalOptions="Fill" />
+                        HorizontalOptions="Fill"
+                        Margin="10, 10,10,50"
+                        FontSize="30"/>
                     <Button
                         Text="Stop"
                         Command="{Binding StopTimeCode}"
-                        HorizontalOptions="Fill" />
+                        HorizontalOptions="Fill"
+                        Margin="10, 50"
+                        FontSize="30"/>
                 </StackLayout>
-            </Border>
-
-            <Border Grid.Column="1" Background="LightGreen" Margin="5">
-            </Border>
-
-            <Border Grid.Column="2" Background="LightPink" Margin="5">
             </Border>
         </Grid>
     </Grid>
