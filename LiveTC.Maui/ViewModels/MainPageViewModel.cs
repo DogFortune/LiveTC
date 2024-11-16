@@ -11,7 +11,6 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(AppData model)
     {
         Model = model;
-        StopWatch = new Stopwatch();
         ElapsedTime = new TimeSpan();
         DisplayTimeCode = new ReactivePropertySlim<string>("00:00:00:00");
         ChapterList = model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
@@ -20,41 +19,48 @@ public class MainPageViewModel : ViewModelBase
         timer.Interval = TimeSpan.FromMilliseconds(10);
         timer.Tick += (s, e) =>
         {
-            ElapsedTime = StopWatch.Elapsed;
-            DisplayTimeCode.Value =
-                $"{ElapsedTime.Hours:00}:{ElapsedTime.Minutes:00}:{ElapsedTime.Seconds:00}:{ElapsedTime.Milliseconds / 10:00}";
+            var timeSpan = ElapsedTime.Add(TimeSpan.FromMilliseconds(10));
+            UpdateDisplayTimeCode(timeSpan);
         };
 
         StartTimeCode = new ReactiveCommand();
         StartTimeCode.Subscribe(_ =>
         {
-            if (IsRunning) return;
-            StopWatch.Start();
+            if (timer.IsRunning) return;
             timer.Start();
-            IsRunning = true;
         });
 
         StopTimeCode = new ReactiveCommand();
         StopTimeCode.Subscribe(_ =>
         {
-            if (!IsRunning) return;
-            StopWatch.Stop();
+            if (!timer.IsRunning) return;
             timer.Stop();
-            IsRunning = false;
         });
+
+        IncrementHour = new ReactiveCommand();
+        IncrementHour.Subscribe(_ =>
+        {
+            if (timer.IsRunning) return;
+            var timeSpan = ElapsedTime.Add(TimeSpan.FromSeconds(1));
+            UpdateDisplayTimeCode(timeSpan);
+        });
+    }
+
+    /// <summary>
+    ///     ディスプレイタイマー更新
+    /// </summary>
+    /// <param name="elapsedTime"></param>
+    private void UpdateDisplayTimeCode(TimeSpan elapsedTime)
+    {
+        ElapsedTime = elapsedTime;
+        DisplayTimeCode.Value =
+            $"{ElapsedTime.Hours:00}:{ElapsedTime.Minutes:00}:{ElapsedTime.Seconds:00}:{ElapsedTime.Milliseconds / 10:00}";
     }
 
     /// <summary>
     ///     モデル
     /// </summary>
     private AppData Model { get; }
-
-    private bool IsRunning { get; set; }
-
-    /// <summary>
-    ///     ストップウォッチ本体
-    /// </summary>
-    private Stopwatch StopWatch { get; }
 
     /// <summary>
     ///     表示用タイム
@@ -75,6 +81,16 @@ public class MainPageViewModel : ViewModelBase
     ///     総合タイム
     /// </summary>
     public ReactivePropertySlim<string> DisplayTimeCode { get; set; }
+
+    /// <summary>
+    ///     加算：時
+    /// </summary>
+    public ReactiveCommand IncrementHour { get; }
+
+    /// <summary>
+    ///     減算：時
+    /// </summary>
+    public ReactiveCommand DecrementHour { get; }
 
     /// <summary>
     ///     チャプターリスト

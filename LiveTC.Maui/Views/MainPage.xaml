@@ -67,18 +67,25 @@
 
             <Border Grid.Column="1" Background="LightGreen" Margin="5">
                 <StackLayout>
+                    <!-- <Button -->
+                    <!--     Text="+" -->
+                    <!--     Command="{Binding StartTimeCode}" -->
+                    <!--     HorizontalOptions="Fill" -->
+                    <!--     Margin="10, 10, 10, 50" -->
+                    <!--     FontSize="30"/> -->
+                    <!-- <Button -->
+                    <!--     Text="-" -->
+                    <!--     Command="{Binding StopTimeCode}" -->
+                    <!--     HorizontalOptions="Fill" -->
+                    <!--     Margin="10, 50" -->
+                    <!--     FontSize="30"/> -->
+                    
                     <Button
-                        Text="+"
-                        Command="{Binding StartTimeCode}"
-                        HorizontalOptions="Fill"
-                        Margin="10, 10, 10, 50"
-                        FontSize="30"/>
-                    <Button
-                        Text="-"
-                        Command="{Binding StopTimeCode}"
+                        Text="＋時"
+                        Command="{Binding IncrementHour}"
                         HorizontalOptions="Fill"
                         Margin="10, 50"
-                        FontSize="30"/>
+                        FontSize="10"/>
                 </StackLayout>
             </Border>
 
