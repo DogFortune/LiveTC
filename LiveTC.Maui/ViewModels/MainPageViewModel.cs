@@ -36,6 +36,13 @@ public class MainPageViewModel : ViewModelBase
             if (!timer.IsRunning) return;
             timer.Stop();
         });
+        
+        ResetTimeCode = new ReactiveCommand();
+        ResetTimeCode.Subscribe(_ =>
+        {
+            if (timer.IsRunning) return;
+            UpdateDisplayTimeCode(TimeSpan.Zero);
+        });
 
         IncrementHour = new ReactiveCommand();
         IncrementHour.Subscribe(_ =>
@@ -76,6 +83,11 @@ public class MainPageViewModel : ViewModelBase
     ///     ストップ
     /// </summary>
     public ReactiveCommand StopTimeCode { get; }
+    
+    /// <summary>
+    ///     リセット
+    /// </summary>
+    public ReactiveCommand ResetTimeCode { get; }
 
     /// <summary>
     ///     総合タイム

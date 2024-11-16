@@ -103,6 +103,12 @@
                         HorizontalOptions="Fill"
                         Margin="10, 50"
                         FontSize="30"/>
+                    <Button
+                        Text="Reset"
+                        Command="{Binding ResetTimeCode}"
+                        HorizontalOptions="Fill"
+                        Margin="10, 50"
+                        FontSize="30"/>
                 </StackLayout>
             </Border>
         </Grid>
