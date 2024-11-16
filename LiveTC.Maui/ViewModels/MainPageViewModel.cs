@@ -11,57 +11,52 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(AppData model)
     {
         Model = model;
-        ElapsedTime = new TimeSpan();
-        DisplayTimeCode = new ReactivePropertySlim<string>("00:00:00:00");
+        ElapsedTime = model.ToReactivePropertySlimAsSynchronized(m => m.ElapsedTime).AddTo(CompositeDisposable);
+        DisplayTimeCode = model.ObserveProperty(m => m.DisplayTimeCode)
+            .ToReadOnlyReactivePropertySlim()
+            .AddTo(CompositeDisposable);
         ChapterList = model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
 
-        var timer = Application.Current.Dispatcher.CreateTimer();
-        timer.Interval = TimeSpan.FromMilliseconds(10);
-        timer.Tick += (s, e) =>
+        MainTimer = Application.Current.Dispatcher.CreateTimer();
+        MainTimer.Interval = TimeSpan.FromMilliseconds(10);
+        MainTimer.Tick += (s, e) =>
         {
-            var timeSpan = ElapsedTime.Add(TimeSpan.FromMilliseconds(10));
-            UpdateDisplayTimeCode(timeSpan);
+            var timeSpan = ElapsedTime.Value.Add(TimeSpan.FromMilliseconds(10));
+            Model.UpdateDisplayTimeCode(timeSpan);
         };
 
-        StartTimeCode = new ReactiveCommand();
-        StartTimeCode.Subscribe(_ =>
-        {
-            if (timer.IsRunning) return;
-            timer.Start();
-        });
-
-        StopTimeCode = new ReactiveCommand();
-        StopTimeCode.Subscribe(_ =>
-        {
-            if (!timer.IsRunning) return;
-            timer.Stop();
-        });
-        
-        ResetTimeCode = new ReactiveCommand();
-        ResetTimeCode.Subscribe(_ =>
-        {
-            if (timer.IsRunning) return;
-            UpdateDisplayTimeCode(TimeSpan.Zero);
-        });
-
-        IncrementHour = new ReactiveCommand();
-        IncrementHour.Subscribe(_ =>
-        {
-            if (timer.IsRunning) return;
-            var timeSpan = ElapsedTime.Add(TimeSpan.FromSeconds(1));
-            UpdateDisplayTimeCode(timeSpan);
-        });
+        InitButton();
     }
 
     /// <summary>
-    ///     ディスプレイタイマー更新
+    ///     ボタンの初期化。主にイベントハンドラー登録。
     /// </summary>
-    /// <param name="elapsedTime"></param>
-    private void UpdateDisplayTimeCode(TimeSpan elapsedTime)
+    private void InitButton()
     {
-        ElapsedTime = elapsedTime;
-        DisplayTimeCode.Value =
-            $"{ElapsedTime.Hours:00}:{ElapsedTime.Minutes:00}:{ElapsedTime.Seconds:00}:{ElapsedTime.Milliseconds / 10:00}";
+        StartTimeCode.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            MainTimer.Start();
+        });
+
+        StopTimeCode.Subscribe(_ =>
+        {
+            if (!MainTimer.IsRunning) return;
+            MainTimer.Stop();
+        });
+
+        ResetTimeCode.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.UpdateDisplayTimeCode(TimeSpan.Zero);
+        });
+
+        IncrementHour.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            var timeSpan = ElapsedTime.Value.Add(TimeSpan.FromSeconds(1));
+            Model.UpdateDisplayTimeCode(timeSpan);
+        });
     }
 
     /// <summary>
@@ -70,39 +65,44 @@ public class MainPageViewModel : ViewModelBase
     private AppData Model { get; }
 
     /// <summary>
+    ///     ストップウォッチ更新用タイマー
+    /// </summary>
+    private IDispatcherTimer MainTimer { get; }
+
+    /// <summary>
     ///     表示用タイム
     /// </summary>
-    private TimeSpan ElapsedTime { get; set; }
+    private ReactivePropertySlim<TimeSpan> ElapsedTime { get; set; }
 
     /// <summary>
     ///     スタート
     /// </summary>
-    public ReactiveCommand StartTimeCode { get; }
+    public ReactiveCommand StartTimeCode { get; } = new();
 
     /// <summary>
     ///     ストップ
     /// </summary>
-    public ReactiveCommand StopTimeCode { get; }
-    
+    public ReactiveCommand StopTimeCode { get; } = new();
+
     /// <summary>
     ///     リセット
     /// </summary>
-    public ReactiveCommand ResetTimeCode { get; }
+    public ReactiveCommand ResetTimeCode { get; } = new();
 
     /// <summary>
     ///     総合タイム
     /// </summary>
-    public ReactivePropertySlim<string> DisplayTimeCode { get; set; }
+    public ReadOnlyReactivePropertySlim<string?> DisplayTimeCode { get; }
 
     /// <summary>
     ///     加算：時
     /// </summary>
-    public ReactiveCommand IncrementHour { get; }
+    public ReactiveCommand IncrementHour { get; } = new();
 
     /// <summary>
     ///     減算：時
     /// </summary>
-    public ReactiveCommand DecrementHour { get; }
+    public ReactiveCommand DecrementHour { get; } = new();
 
     /// <summary>
     ///     チャプターリスト
