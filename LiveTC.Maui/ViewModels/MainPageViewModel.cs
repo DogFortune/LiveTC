@@ -11,19 +11,16 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(AppData model)
     {
         Model = model;
-        ElapsedTime = model.ToReactivePropertySlimAsSynchronized(m => m.ElapsedTime).AddTo(CompositeDisposable);
-        DisplayTimeCode = model.ObserveProperty(m => m.DisplayTimeCode)
+        ElapsedTime = Model.ToReactivePropertySlimAsSynchronized(m => m.ElapsedTime).AddTo(CompositeDisposable);
+        DisplayTimeCode = Model.ObserveProperty(m => m.DisplayTimeCode)
             .ToReadOnlyReactivePropertySlim()
             .AddTo(CompositeDisposable);
-        ChapterList = model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
+        ChapterList = Model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
+        SelectedChapter = Model.ToReactivePropertySlimAsSynchronized(m => m.SelectedChapter).AddTo(CompositeDisposable);
 
         MainTimer = Application.Current.Dispatcher.CreateTimer();
         MainTimer.Interval = TimeSpan.FromMilliseconds(10);
-        MainTimer.Tick += (s, e) =>
-        {
-            var timeSpan = ElapsedTime.Value.Add(TimeSpan.FromMilliseconds(10));
-            Model.UpdateDisplayTimeCode(timeSpan);
-        };
+        MainTimer.Tick += (s, e) => { Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10)); };
 
         InitButton();
     }
@@ -33,6 +30,7 @@ public class MainPageViewModel : ViewModelBase
     /// </summary>
     private void InitButton()
     {
+        // TODO: ReactiveCommandの非活性化を使ってボタンを押せないようにすると便利。
         StartTimeCode.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
@@ -48,14 +46,19 @@ public class MainPageViewModel : ViewModelBase
         ResetTimeCode.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
-            Model.UpdateDisplayTimeCode(TimeSpan.Zero);
+            Model.ResetElapsedTime();
         });
 
         IncrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
-            var timeSpan = ElapsedTime.Value.Add(TimeSpan.FromSeconds(1));
-            Model.UpdateDisplayTimeCode(timeSpan);
+            Model.IncrementElapsedTime(TimeSpan.FromHours(1));
+        });
+        
+        DecrementHour.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromHours(1));
         });
     }
 
@@ -108,4 +111,9 @@ public class MainPageViewModel : ViewModelBase
     ///     チャプターリスト
     /// </summary>
     public ReadOnlyReactiveCollection<Chapter> ChapterList { get; }
+
+    /// <summary>
+    ///     選択中のチャプター
+    /// </summary>
+    public ReactivePropertySlim<Chapter> SelectedChapter { get; }
 }

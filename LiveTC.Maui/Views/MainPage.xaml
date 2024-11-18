@@ -32,6 +32,7 @@
             <!-- 下段の各列のコンテンツ -->
             <Border Grid.Column="0" Background="LightBlue" Margin="5">
                 <ListView ItemsSource="{Binding ChapterList, Mode=OneWay}"
+                          SelectedItem="{Binding SelectedChapter.Value, Mode=TwoWay}"
                           HasUnevenRows="True"
                           SeparatorVisibility="Default">
                     <ListView.HeaderTemplate>
@@ -84,7 +85,13 @@
                         Text="＋時"
                         Command="{Binding IncrementHour}"
                         HorizontalOptions="Fill"
-                        Margin="10, 50"
+                        Margin="10"
+                        FontSize="10"/>
+                    <Button
+                        Text="-時"
+                        Command="{Binding DecrementHour}"
+                        HorizontalOptions="Fill"
+                        Margin="10"
                         FontSize="10"/>
                 </StackLayout>
             </Border>
