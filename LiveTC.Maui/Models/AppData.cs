@@ -128,7 +128,7 @@ public class AppData : BindableBase
     }
 
     private TimeSpan _elapsedTime;
-    
+
     /// <summary>
     ///     本編TC
     /// </summary>

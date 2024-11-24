@@ -20,7 +20,7 @@ public class MainPageViewModel : ViewModelBase
         SelectedChapterTimeCode = Model.ObserveProperty(m => m.DisplaySelectedChapterTimeCode)
             .ToReadOnlyReactivePropertySlim()
             .AddTo(CompositeDisposable);
-        
+
         MainTimer = Application.Current.Dispatcher.CreateTimer();
         MainTimer.Interval = TimeSpan.FromMilliseconds(10);
         MainTimer.Tick += (s, e) =>
@@ -67,6 +67,8 @@ public class MainPageViewModel : ViewModelBase
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromHours(1));
         });
+
+        ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; });
     }
 
     /// <summary>
@@ -123,4 +125,14 @@ public class MainPageViewModel : ViewModelBase
     ///     選択中のチャプター
     /// </summary>
     public ReactivePropertySlim<Chapter> SelectedChapter { get; }
+
+    /// <summary>
+    ///     チャプターTC切り替えコマンド
+    /// </summary>
+    public ReactiveCommand ChangeChapterMode { get; } = new();
+
+    /// <summary>
+    ///     チャプターTCの表示・非表示
+    /// </summary>
+    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new(true);
 }

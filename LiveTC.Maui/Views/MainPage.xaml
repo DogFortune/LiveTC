@@ -12,28 +12,34 @@
         </Grid.RowDefinitions>
 
         <!-- 上段のコンテンツ -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Background="LightGray" Margin="5">
-                <Label
-                    Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
-                    TextColor="Black"
-                    FontSize="80"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center" />
+        <Border Grid.Row="0">
+            <Border BackgroundColor="LightGray">
+                <StackLayout Orientation="Horizontal" Margin="10" HorizontalOptions="Center">
+                    <Label
+                        Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
+                        TextColor="Black"
+                        FontSize="80"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        Margin="20" />
+                    <Label
+                        Text="{Binding SelectedChapterTimeCode.Value, Mode=OneWay}"
+                        TextColor="Black"
+                        FontSize="80"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        Margin="20"
+                        IsVisible="{Binding ShowChapterTimeCode.Value, Mode=TwoWay}" />
+                </StackLayout>
             </Border>
-            <Border Grid.Column="1" Background="LightGray" Margin="5">
-                <Label
-                    Text="{Binding SelectedChapterTimeCode.Value, Mode=OneWay}"
-                    TextColor="Black"
-                    FontSize="80"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center" />
-            </Border>
-        </Grid>
+        </Border>
+        <!-- <Grid Grid.Row="0"> -->
+        <!--     <Grid.ColumnDefinitions> -->
+        <!--         <ColumnDefinition /> -->
+        <!--         <ColumnDefinition /> -->
+        <!--     </Grid.ColumnDefinitions> -->
+        <!--      -->
+        <!-- </Grid> -->
         <!-- 下段の3列レイアウト -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -103,6 +109,12 @@
                     <Button
                         Text="-時"
                         Command="{Binding DecrementHour}"
+                        HorizontalOptions="Fill"
+                        Margin="10"
+                        FontSize="10" />
+                    <Button
+                        Text="チャプターTC切り替え"
+                        Command="{Binding ChangeChapterMode}"
                         HorizontalOptions="Fill"
                         Margin="10"
                         FontSize="10" />
