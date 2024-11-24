@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using LiveTC.Maui.Models.Chapters;
 using Prism.Mvvm;
 

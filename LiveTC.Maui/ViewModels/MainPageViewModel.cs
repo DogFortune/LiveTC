@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Reactive.Linq;
 using LiveTC.Maui.Models;
 using LiveTC.Maui.Models.Chapters;
 using Reactive.Bindings;
