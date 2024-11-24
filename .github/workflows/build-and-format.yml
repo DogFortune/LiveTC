@@ -1,0 +1,41 @@
+name: Build and Format
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  macOS:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Set default Xcode 15
+        run: sudo xcode-select -s "/Applications/Xcode_15.4.app"
+      - name: restore
+        run: dotnet workload restore
+      - name: format
+        run: dotnet format --verify-no-changes
+      - name: build
+        run: dotnet build -c Release
+  Windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: restore
+        run: dotnet workload restore
+      - name: format
+        run: dotnet format --verify-no-changes
+      - name: build
+        run: dotnet build -c Release
