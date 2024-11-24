@@ -62,10 +62,34 @@ public class MainPageViewModel : ViewModelBase
             Model.IncrementElapsedTime(TimeSpan.FromHours(1));
         });
 
+        IncrementMinute.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromMinutes(1));
+        });
+
+        IncrementSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromSeconds(1));
+        });
+
         DecrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromHours(1));
+        });
+
+        DecrementMinute.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromMinutes(1));
+        });
+
+        DecrementSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromSeconds(1));
         });
 
         ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; });
@@ -112,9 +136,29 @@ public class MainPageViewModel : ViewModelBase
     public ReactiveCommand IncrementHour { get; } = new();
 
     /// <summary>
+    ///     加算：分
+    /// </summary>
+    public ReactiveCommand IncrementMinute { get; } = new();
+
+    /// <summary>
+    ///     加算：病
+    /// </summary>
+    public ReactiveCommand IncrementSecond { get; } = new();
+
+    /// <summary>
     ///     減算：時
     /// </summary>
     public ReactiveCommand DecrementHour { get; } = new();
+
+    /// <summary>
+    ///     減算：分
+    /// </summary>
+    public ReactiveCommand DecrementMinute { get; } = new();
+
+    /// <summary>
+    ///     減算：秒
+    /// </summary>
+    public ReactiveCommand DecrementSecond { get; } = new();
 
     /// <summary>
     ///     チャプターリスト
@@ -134,5 +178,5 @@ public class MainPageViewModel : ViewModelBase
     /// <summary>
     ///     チャプターTCの表示・非表示
     /// </summary>
-    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new(true);
+    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new();
 }

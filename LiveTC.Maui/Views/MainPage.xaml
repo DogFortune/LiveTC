@@ -4,7 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LiveTC.Maui.Views.MainPage"
              Width="800"
-             Height="400">
+             Height="400"
+             NavigationPage.HasNavigationBar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200" />
@@ -87,31 +88,41 @@
 
             <Border Grid.Column="1" Background="LightGreen" Margin="5">
                 <StackLayout>
-                    <!-- <Button -->
-                    <!--     Text="+" -->
-                    <!--     Command="{Binding StartTimeCode}" -->
-                    <!--     HorizontalOptions="Fill" -->
-                    <!--     Margin="10, 10, 10, 50" -->
-                    <!--     FontSize="30"/> -->
-                    <!-- <Button -->
-                    <!--     Text="-" -->
-                    <!--     Command="{Binding StopTimeCode}" -->
-                    <!--     HorizontalOptions="Fill" -->
-                    <!--     Margin="10, 50" -->
-                    <!--     FontSize="30"/> -->
-
-                    <Button
-                        Text="＋時"
-                        Command="{Binding IncrementHour}"
-                        HorizontalOptions="Fill"
-                        Margin="10"
-                        FontSize="10" />
-                    <Button
-                        Text="-時"
-                        Command="{Binding DecrementHour}"
-                        HorizontalOptions="Fill"
-                        Margin="10"
-                        FontSize="10" />
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="本編" />
+                        <Button
+                            Text="＋時"
+                            Command="{Binding IncrementHour}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                        <Button
+                            Text="＋分"
+                            Command="{Binding IncrementMinute}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                        <Button
+                            Text="＋秒"
+                            Command="{Binding IncrementSecond}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button
+                            Text="-時"
+                            Command="{Binding DecrementHour}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                        <Button
+                            Text="-分"
+                            Command="{Binding DecrementMinute}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                        <Button
+                            Text="-秒"
+                            Command="{Binding DecrementSecond}"
+                            HorizontalOptions="Fill"
+                            FontSize="10" />
+                    </StackLayout>
                     <Button
                         Text="チャプターTC切り替え"
                         Command="{Binding ChangeChapterMode}"
