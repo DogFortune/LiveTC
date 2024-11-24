@@ -12,26 +12,28 @@
         </Grid.RowDefinitions>
 
         <!-- 上段のコンテンツ -->
-        <Border Grid.Row="0" Background="LightGray" Margin="5">
-            <StackLayout Orientation="Horizontal">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Background="LightGray" Margin="5">
                 <Label
                     Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
                     TextColor="Black"
                     FontSize="80"
                     HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    Margin="10,10,25,10" />
+                    VerticalTextAlignment="Center" />
+            </Border>
+            <Border Grid.Column="1" Background="LightGray" Margin="5">
                 <Label
                     Text="{Binding SelectedChapterTimeCode.Value, Mode=OneWay}"
                     TextColor="Black"
                     FontSize="80"
                     HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    Margin="25, 10,10,10" />
-            </StackLayout>
-
-        </Border>
-
+                    VerticalTextAlignment="Center" />
+            </Border>
+        </Grid>
         <!-- 下段の3列レイアウト -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

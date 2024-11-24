@@ -108,7 +108,7 @@ public class AppData : BindableBase
     private string _displayTimeCode;
 
     /// <summary>
-    ///     統合タイム
+    ///     本編TCの表示用
     /// </summary>
     public string DisplayTimeCode
     {
@@ -128,7 +128,10 @@ public class AppData : BindableBase
     }
 
     private TimeSpan _elapsedTime;
-
+    
+    /// <summary>
+    ///     本編TC
+    /// </summary>
     public TimeSpan ElapsedTime
     {
         get => _elapsedTime;
