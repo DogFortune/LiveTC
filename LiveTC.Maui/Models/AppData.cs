@@ -94,10 +94,7 @@ public class AppData : BindableBase
     public void AddChapter()
     {
         ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
-        ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
-        ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
-        ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
-        ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
+        SelectedChapter = ChapterList.Last();
     }
 
     public void RemoveChapter()

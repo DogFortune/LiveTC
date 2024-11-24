@@ -88,44 +88,50 @@
 
             <Border Grid.Column="1" Background="LightGreen" Margin="5">
                 <StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="本編" />
+                    <StackLayout Orientation="Horizontal" Margin="5">
                         <Button
-                            Text="＋時"
+                            Text="+時"
                             Command="{Binding IncrementHour}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                         <Button
-                            Text="＋分"
+                            Text="+分"
                             Command="{Binding IncrementMinute}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                         <Button
-                            Text="＋秒"
+                            Text="+秒"
                             Command="{Binding IncrementSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                     </StackLayout>
-                    <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" Margin="5">
                         <Button
-                            Text="-時"
+                            Text="時"
                             Command="{Binding DecrementHour}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                         <Button
                             Text="-分"
                             Command="{Binding DecrementMinute}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                         <Button
                             Text="-秒"
                             Command="{Binding DecrementSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="10" />
+                            FontSize="14" />
                     </StackLayout>
                     <Button
                         Text="チャプターTC切り替え"
                         Command="{Binding ChangeChapterMode}"
+                        HorizontalOptions="Fill"
+                        Margin="10"
+                        FontSize="10" />
+                    
+                    <Button
+                        Text="チャプター追加"
+                        Command="{Binding AddChapter}"
                         HorizontalOptions="Fill"
                         Margin="10"
                         FontSize="10" />

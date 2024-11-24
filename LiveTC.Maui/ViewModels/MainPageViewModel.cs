@@ -56,6 +56,8 @@ public class MainPageViewModel : ViewModelBase
             Model.ResetElapsedTime();
         });
 
+        AddChapter.Subscribe(_ => { Model.AddChapter(); });
+
         IncrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
@@ -164,6 +166,16 @@ public class MainPageViewModel : ViewModelBase
     ///     チャプターリスト
     /// </summary>
     public ReadOnlyReactiveCollection<Chapter> ChapterList { get; }
+
+    /// <summary>
+    ///     チャプター追加
+    /// </summary>
+    public ReactiveCommand AddChapter { get; } = new();
+
+    /// <summary>
+    ///     チャプター削除
+    /// </summary>
+    public ReactiveCommand RemoveChapter { get; } = new();
 
     /// <summary>
     ///     選択中のチャプター
