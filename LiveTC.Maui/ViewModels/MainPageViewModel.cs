@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reactive.Linq;
 using LiveTC.Maui.Models;
 using LiveTC.Maui.Models.Chapters;
 using Reactive.Bindings;
@@ -11,16 +12,22 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(AppData model)
     {
         Model = model;
-        ElapsedTime = Model.ToReactivePropertySlimAsSynchronized(m => m.ElapsedTime).AddTo(CompositeDisposable);
         DisplayTimeCode = Model.ObserveProperty(m => m.DisplayTimeCode)
             .ToReadOnlyReactivePropertySlim()
             .AddTo(CompositeDisposable);
         ChapterList = Model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
         SelectedChapter = Model.ToReactivePropertySlimAsSynchronized(m => m.SelectedChapter).AddTo(CompositeDisposable);
-
+        SelectedChapterTimeCode = Model.ObserveProperty(m => m.DisplaySelectedChapterTimeCode)
+            .ToReadOnlyReactivePropertySlim()
+            .AddTo(CompositeDisposable);
+        
         MainTimer = Application.Current.Dispatcher.CreateTimer();
         MainTimer.Interval = TimeSpan.FromMilliseconds(10);
-        MainTimer.Tick += (s, e) => { Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10)); };
+        MainTimer.Tick += (s, e) =>
+        {
+            Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
+            Model.IncrementChapterTime(TimeSpan.FromMilliseconds(10));
+        };
 
         InitButton();
     }
@@ -54,7 +61,7 @@ public class MainPageViewModel : ViewModelBase
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromHours(1));
         });
-        
+
         DecrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
@@ -71,11 +78,6 @@ public class MainPageViewModel : ViewModelBase
     ///     ストップウォッチ更新用タイマー
     /// </summary>
     private IDispatcherTimer MainTimer { get; }
-
-    /// <summary>
-    ///     表示用タイム
-    /// </summary>
-    private ReactivePropertySlim<TimeSpan> ElapsedTime { get; set; }
 
     /// <summary>
     ///     スタート
@@ -96,6 +98,11 @@ public class MainPageViewModel : ViewModelBase
     ///     総合タイム
     /// </summary>
     public ReadOnlyReactivePropertySlim<string?> DisplayTimeCode { get; }
+
+    /// <summary>
+    ///     チャプタータイム
+    /// </summary>
+    public ReadOnlyReactivePropertySlim<string?> SelectedChapterTimeCode { get; }
 
     /// <summary>
     ///     加算：時

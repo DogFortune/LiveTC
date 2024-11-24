@@ -13,12 +13,23 @@
 
         <!-- 上段のコンテンツ -->
         <Border Grid.Row="0" Background="LightGray" Margin="5">
-            <Label
-                Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
-                TextColor="Black"
-                FontSize="80"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"/>
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    Text="{Binding DisplayTimeCode.Value, Mode=OneWay}"
+                    TextColor="Black"
+                    FontSize="80"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Margin="10,10,25,10" />
+                <Label
+                    Text="{Binding SelectedChapterTimeCode.Value, Mode=OneWay}"
+                    TextColor="Black"
+                    FontSize="80"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Margin="25, 10,10,10" />
+            </StackLayout>
+
         </Border>
 
         <!-- 下段の3列レイアウト -->
@@ -80,19 +91,19 @@
                     <!--     HorizontalOptions="Fill" -->
                     <!--     Margin="10, 50" -->
                     <!--     FontSize="30"/> -->
-                    
+
                     <Button
                         Text="＋時"
                         Command="{Binding IncrementHour}"
                         HorizontalOptions="Fill"
                         Margin="10"
-                        FontSize="10"/>
+                        FontSize="10" />
                     <Button
                         Text="-時"
                         Command="{Binding DecrementHour}"
                         HorizontalOptions="Fill"
                         Margin="10"
-                        FontSize="10"/>
+                        FontSize="10" />
                 </StackLayout>
             </Border>
 
@@ -103,19 +114,19 @@
                         Command="{Binding StartTimeCode}"
                         HorizontalOptions="Fill"
                         Margin="10, 10,10,50"
-                        FontSize="30"/>
+                        FontSize="30" />
                     <Button
                         Text="Stop"
                         Command="{Binding StopTimeCode}"
                         HorizontalOptions="Fill"
                         Margin="10, 50"
-                        FontSize="30"/>
+                        FontSize="30" />
                     <Button
                         Text="Reset"
                         Command="{Binding ResetTimeCode}"
                         HorizontalOptions="Fill"
                         Margin="10, 50"
-                        FontSize="30"/>
+                        FontSize="30" />
                 </StackLayout>
             </Border>
         </Grid>

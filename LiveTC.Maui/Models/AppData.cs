@@ -12,7 +12,10 @@ public class AppData : BindableBase
         ChapterList = new ObservableCollection<Chapter>();
         AddChapter();
 
+        SelectedChapter = ChapterList.FirstOrDefault() ?? throw new InvalidOperationException();
+
         DisplayTimeCode = "00:00:00:00";
+        DisplaySelectedChapterTimeCode = "00:00:00:00";
         ElapsedTime = new TimeSpan();
     }
 
@@ -46,6 +49,27 @@ public class AppData : BindableBase
     }
 
     /// <summary>
+    ///     チャプターTCのインクリメント
+    /// </summary>
+    /// <param name="time"></param>
+    public void IncrementChapterTime(TimeSpan time)
+    {
+        var timeSpan = SelectedChapter.TimeCode.Add(time);
+        UpdateSelectedChapterTimeCode(timeSpan);
+    }
+
+    /// <summary>
+    ///     チャプターTCのデクリメント
+    /// </summary>
+    /// <param name="time">デクリメント値。マイナスになる場合は更新されない。</param>
+    public void DecrementChapterTime(TimeSpan time)
+    {
+        var timeSpan = SelectedChapter.TimeCode.Add(time);
+        if (timeSpan.TotalMilliseconds < 0) return;
+        UpdateSelectedChapterTimeCode(timeSpan);
+    }
+
+    /// <summary>
     ///     ディスプレイタイマー更新
     /// </summary>
     /// <param name="elapsedTime">更新された値のTimeSpan。ここで指定した値になります。</param>
@@ -54,6 +78,17 @@ public class AppData : BindableBase
         ElapsedTime = elapsedTime;
         DisplayTimeCode =
             $"{ElapsedTime.Hours:00}:{ElapsedTime.Minutes:00}:{ElapsedTime.Seconds:00}:{ElapsedTime.Milliseconds / 10:00}";
+    }
+
+    /// <summary>
+    ///     ディスプレイタイマー更新
+    /// </summary>
+    /// <param name="chapterTime">更新された値のTimeSpan。ここで指定した値になります。</param>
+    private void UpdateSelectedChapterTimeCode(TimeSpan chapterTime)
+    {
+        SelectedChapter.TimeCode = chapterTime;
+        DisplaySelectedChapterTimeCode =
+            $"{SelectedChapter.TimeCode.Hours:00}:{SelectedChapter.TimeCode.Minutes:00}:{SelectedChapter.TimeCode.Seconds:00}:{SelectedChapter.TimeCode.Milliseconds / 10:00}";
     }
 
     public void AddChapter()
@@ -81,6 +116,17 @@ public class AppData : BindableBase
         set => SetProperty(ref _displayTimeCode, value);
     }
 
+    private string _displaySelectedChapterTimeCode;
+
+    /// <summary>
+    ///     選択中のチャプターTC
+    /// </summary>
+    public string DisplaySelectedChapterTimeCode
+    {
+        get => _displaySelectedChapterTimeCode;
+        set => SetProperty(ref _displaySelectedChapterTimeCode, value);
+    }
+
     private TimeSpan _elapsedTime;
 
     public TimeSpan ElapsedTime
@@ -97,7 +143,11 @@ public class AppData : BindableBase
     public Chapter SelectedChapter
     {
         get => _selectedChapter;
-        set => SetProperty(ref _selectedChapter, value);
+        set
+        {
+            SetProperty(ref _selectedChapter, value);
+            UpdateSelectedChapterTimeCode(SelectedChapter.TimeCode);
+        }
     }
 
     /// <summary>
