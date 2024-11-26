@@ -6,6 +6,12 @@
              Width="800"
              Height="400"
              NavigationPage.HasNavigationBar="False">
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="View">
+            <MenuFlyoutItem Text="TimeCodeView"
+                            Command="{Binding RefreshCommand}" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200" />
@@ -107,7 +113,7 @@
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="5">
                         <Button
-                            Text="時"
+                            Text="-時"
                             Command="{Binding DecrementHour}"
                             HorizontalOptions="Fill"
                             FontSize="14" />
@@ -128,7 +134,7 @@
                         HorizontalOptions="Fill"
                         Margin="10"
                         FontSize="10" />
-                    
+
                     <Button
                         Text="チャプター追加"
                         Command="{Binding AddChapter}"

@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LiveTC.Maui.Models.Chapters;
-using Prism.Mvvm;
 
 namespace LiveTC.Maui.Models;
 
-public class AppData : BindableBase
+public class AppData : ObservableObject
 {
     public AppData()
     {

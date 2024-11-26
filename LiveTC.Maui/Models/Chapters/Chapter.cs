@@ -1,8 +1,8 @@
-using Prism.Mvvm;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LiveTC.Maui.Models.Chapters;
 
-public class Chapter : BindableBase
+public class Chapter : ObservableObject
 {
     public Chapter(int number, TimeSpan timeCode)
     {

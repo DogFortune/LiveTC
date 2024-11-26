@@ -1,11 +1,10 @@
 using System.Reactive.Disposables;
-using Prism.Mvvm;
-using Prism.Navigation;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LiveTC.Maui.ViewModels
 {
     /// ViewModelの基底クラス
-    public abstract class ViewModelBase : BindableBase, IDisposable, IDestructible
+    public abstract class ViewModelBase : ObservableObject, IDisposable
     {
         /// ReactiveProperty一括破棄用フィールド
         protected CompositeDisposable CompositeDisposable = new();
