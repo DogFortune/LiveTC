@@ -74,6 +74,12 @@ public class MainPageViewModel : ViewModelBase
             Model.IncrementElapsedTime(TimeSpan.FromSeconds(1));
         });
 
+        IncrementMillisecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
+        });
+
         DecrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
@@ -90,6 +96,12 @@ public class MainPageViewModel : ViewModelBase
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromSeconds(1));
+        });
+
+        DecrementMillisecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromMilliseconds(10));
         });
 
         ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; });
@@ -141,9 +153,14 @@ public class MainPageViewModel : ViewModelBase
     public ReactiveCommand IncrementMinute { get; } = new();
 
     /// <summary>
-    ///     加算：病
+    ///     加算：秒
     /// </summary>
     public ReactiveCommand IncrementSecond { get; } = new();
+
+    /// <summary>
+    ///     加算：ミリ秒
+    /// </summary>
+    public ReactiveCommand IncrementMillisecond { get; } = new();
 
     /// <summary>
     ///     減算：時
@@ -159,6 +176,11 @@ public class MainPageViewModel : ViewModelBase
     ///     減算：秒
     /// </summary>
     public ReactiveCommand DecrementSecond { get; } = new();
+
+    /// <summary>
+    ///     減算：ミリ秒
+    /// </summary>
+    public ReactiveCommand DecrementMillisecond { get; } = new();
 
     /// <summary>
     ///     チャプターリスト
