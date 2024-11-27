@@ -40,71 +40,72 @@ public class MainPageViewModel : ViewModelBase
         {
             if (MainTimer.IsRunning) return;
             MainTimer.Start();
-        });
+        }).AddTo(CompositeDisposable);
 
         StopTimeCode.Subscribe(_ =>
         {
             if (!MainTimer.IsRunning) return;
             MainTimer.Stop();
-        });
+        }).AddTo(CompositeDisposable);
 
         ResetTimeCode.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.ResetElapsedTime();
-        });
+        }).AddTo(CompositeDisposable);
 
-        AddChapter.Subscribe(_ => { Model.AddChapter(); });
+        AddChapter.Subscribe(_ => { Model.AddChapter(); }).AddTo(CompositeDisposable);
 
         IncrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromHours(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         IncrementMinute.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromMinutes(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         IncrementSecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromSeconds(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         IncrementMillisecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
-        });
+        }).AddTo(CompositeDisposable);
 
         DecrementHour.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromHours(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         DecrementMinute.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromMinutes(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         DecrementSecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromSeconds(1));
-        });
+        }).AddTo(CompositeDisposable);
 
         DecrementMillisecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromMilliseconds(10));
-        });
+        }).AddTo(CompositeDisposable);
 
-        ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; });
+        ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; })
+            .AddTo(CompositeDisposable);
     }
 
     /// <summary>
