@@ -55,6 +55,7 @@ public class MainPageViewModel : ViewModelBase
         }).AddTo(CompositeDisposable);
 
         AddChapter.Subscribe(_ => { Model.AddChapter(); }).AddTo(CompositeDisposable);
+        RemoveChapter.Subscribe(_ => { Model.RemoveChapter(); }).AddTo(CompositeDisposable);
 
         IncrementHour.Subscribe(_ =>
         {
@@ -211,5 +212,5 @@ public class MainPageViewModel : ViewModelBase
     /// <summary>
     ///     チャプターTCの表示・非表示
     /// </summary>
-    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new();
+    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new(true);
 }

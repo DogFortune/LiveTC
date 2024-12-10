@@ -1,7 +1,6 @@
 ﻿using LiveTC.Maui.Models;
 using LiveTC.Maui.ViewModels;
 using LiveTC.Maui.Views;
-using Microsoft.Extensions.Logging;
 
 namespace LiveTC.Maui;
 

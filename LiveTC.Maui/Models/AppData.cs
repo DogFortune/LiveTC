@@ -90,15 +90,23 @@ public class AppData : ObservableObject
             $"{SelectedChapter.TimeCode.Hours:00}:{SelectedChapter.TimeCode.Minutes:00}:{SelectedChapter.TimeCode.Seconds:00}:{SelectedChapter.TimeCode.Milliseconds / 10:00}";
     }
 
+    /// <summary>
+    ///     チャプターの追加
+    /// </summary>
     public void AddChapter()
     {
         ChapterList.Add(new Chapter(ChapterList.Count + 1, TimeSpan.Zero));
         SelectedChapter = ChapterList.Last();
     }
 
+    /// <summary>
+    ///     チャプター削除
+    /// </summary>
     public void RemoveChapter()
     {
+        if (ChapterList.Count == 1) return;
         ChapterList.Remove(ChapterList[ChapterList.IndexOf(SelectedChapter)]);
+        SelectedChapter = ChapterList.Last();
     }
 
     private string _displayTimeCode;

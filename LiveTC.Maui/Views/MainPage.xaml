@@ -56,41 +56,62 @@
             </Grid.ColumnDefinitions>
 
             <!-- 下段の各列のコンテンツ -->
-            <Border Grid.Column="0" Background="LightBlue" Margin="5">
-                <ListView ItemsSource="{Binding ChapterList, Mode=OneWay}"
-                          SelectedItem="{Binding SelectedChapter.Value, Mode=TwoWay}"
-                          HasUnevenRows="True"
-                          SeparatorVisibility="Default">
-                    <ListView.HeaderTemplate>
-                        <DataTemplate>
-                            <Grid Padding="10" BackgroundColor="LightGray">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Text="チャプター番号" FontAttributes="Bold" />
-                                <Label Grid.Column="1" Text="タイムコード" FontAttributes="Bold" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.HeaderTemplate>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border>
+                    <StackLayout Orientation="Horizontal">
+                        <Button
+                            Text="チャプター追加"
+                            Command="{Binding AddChapter}"
+                            HorizontalOptions="Fill"
+                            FontSize="20" />
+                        <Button
+                            Text="チャプター削除"
+                            Command="{Binding RemoveChapter}"
+                            HorizontalOptions="Fill"
+                            FontSize="20" />
+                    </StackLayout>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0" Background="LightBlue" Margin="5">
+                    <ListView ItemsSource="{Binding ChapterList, Mode=OneWay}"
+                              SelectedItem="{Binding SelectedChapter.Value, Mode=TwoWay}"
+                              HasUnevenRows="True"
+                              SeparatorVisibility="Default">
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10" BackgroundColor="LightGray">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Number}" />
-                                    <Label Grid.Column="1" Text="{Binding TimeCode}" />
+                                    <Label Grid.Column="0" Text="チャプター番号" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="タイムコード" FontAttributes="Bold" />
                                 </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Border>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Padding="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Text="{Binding Number}" />
+                                        <Label Grid.Column="1" Text="{Binding TimeCode}" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Border>
+            </Grid>
+
 
             <Border Grid.Column="1" Background="LightGreen" Margin="5">
                 <StackLayout>
@@ -99,58 +120,53 @@
                             Text="+時"
                             Command="{Binding IncrementHour}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="+分"
                             Command="{Binding IncrementMinute}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="+秒"
                             Command="{Binding IncrementSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="+ミリ秒"
                             Command="{Binding IncrementMilliSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="5">
                         <Button
                             Text="-時"
                             Command="{Binding DecrementHour}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="-分"
                             Command="{Binding DecrementMinute}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="-秒"
                             Command="{Binding DecrementSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                         <Button
                             Text="-ミリ秒"
                             Command="{Binding DecrementMilliSecond}"
                             HorizontalOptions="Fill"
-                            FontSize="14" />
+                            FontSize="20" />
                     </StackLayout>
                     <Button
                         Text="チャプターTC切り替え"
                         Command="{Binding ChangeChapterMode}"
                         HorizontalOptions="Fill"
                         Margin="10"
-                        FontSize="10" />
+                        FontSize="20" />
 
-                    <Button
-                        Text="チャプター追加"
-                        Command="{Binding AddChapter}"
-                        HorizontalOptions="Fill"
-                        Margin="10"
-                        FontSize="10" />
+
                 </StackLayout>
             </Border>
 
