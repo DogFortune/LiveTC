@@ -74,7 +74,7 @@ public class MainPageViewModel : ViewModelBase
             Model.IncrementElapsedTime(TimeSpan.FromSeconds(1));
         }).AddTo(CompositeDisposable);
 
-        IncrementMillisecond.Subscribe(_ =>
+        IncrementMilliSecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
@@ -98,7 +98,7 @@ public class MainPageViewModel : ViewModelBase
             Model.DecrementElapsedTime(TimeSpan.FromSeconds(1));
         }).AddTo(CompositeDisposable);
 
-        DecrementMillisecond.Subscribe(_ =>
+        DecrementMilliSecond.Subscribe(_ =>
         {
             if (MainTimer.IsRunning) return;
             Model.DecrementElapsedTime(TimeSpan.FromMilliseconds(10));
@@ -161,7 +161,7 @@ public class MainPageViewModel : ViewModelBase
     /// <summary>
     ///     加算：ミリ秒
     /// </summary>
-    public ReactiveCommand IncrementMillisecond { get; } = new();
+    public ReactiveCommand IncrementMilliSecond { get; } = new();
 
     /// <summary>
     ///     減算：時
@@ -181,7 +181,7 @@ public class MainPageViewModel : ViewModelBase
     /// <summary>
     ///     減算：ミリ秒
     /// </summary>
-    public ReactiveCommand DecrementMillisecond { get; } = new();
+    public ReactiveCommand DecrementMilliSecond { get; } = new();
 
     /// <summary>
     ///     チャプターリスト

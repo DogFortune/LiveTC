@@ -110,6 +110,11 @@
                             Command="{Binding IncrementSecond}"
                             HorizontalOptions="Fill"
                             FontSize="14" />
+                        <Button
+                            Text="+ミリ秒"
+                            Command="{Binding IncrementMilliSecond}"
+                            HorizontalOptions="Fill"
+                            FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="5">
                         <Button
@@ -125,6 +130,11 @@
                         <Button
                             Text="-秒"
                             Command="{Binding DecrementSecond}"
+                            HorizontalOptions="Fill"
+                            FontSize="14" />
+                        <Button
+                            Text="-ミリ秒"
+                            Command="{Binding DecrementMilliSecond}"
                             HorizontalOptions="Fill"
                             FontSize="14" />
                     </StackLayout>
