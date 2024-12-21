@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="LiveTC.Maui.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,9 +7,7 @@
     xmlns:views="clr-namespace:LiveTC.Maui.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="LiveTC.Maui">
-
     <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
 

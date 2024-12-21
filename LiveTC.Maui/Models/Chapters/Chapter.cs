@@ -1,12 +1,9 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace LiveTC.Maui.Models.Chapters;
 
-public class Chapter
+public class Chapter : ObservableObject
 {
-    public Chapter(int number)
-    {
-        Number = number;
-        TimeCode = new TimeSpan(0);
-    }
     public Chapter(int number, TimeSpan timeCode)
     {
         Number = number;
@@ -21,5 +18,11 @@ public class Chapter
     /// <summary>
     ///     チャプター毎のタイムコード
     /// </summary>
-    public TimeSpan TimeCode { get; set; }
+    private TimeSpan _timeCode;
+
+    public TimeSpan TimeCode
+    {
+        get => _timeCode;
+        set => SetProperty(ref _timeCode, value);
+    }
 }

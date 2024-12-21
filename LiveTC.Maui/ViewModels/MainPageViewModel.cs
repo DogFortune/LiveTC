@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using LiveTC.Maui.Models;
 using LiveTC.Maui.Models.Chapters;
 using Reactive.Bindings;
@@ -11,37 +10,104 @@ public class MainPageViewModel : ViewModelBase
     public MainPageViewModel(AppData model)
     {
         Model = model;
-        StopWatch = new Stopwatch();
-        ElapsedTime = new TimeSpan();
-        DisplayTimeCode = new ReactivePropertySlim<string>("00:00:00:00");
-        ChapterList = model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
+        DisplayTimeCode = Model.ObserveProperty(m => m.DisplayTimeCode)
+            .ToReadOnlyReactivePropertySlim()
+            .AddTo(CompositeDisposable);
+        ChapterList = Model.ChapterList.ToReadOnlyReactiveCollection().AddTo(CompositeDisposable);
+        SelectedChapter = Model.ToReactivePropertySlimAsSynchronized(m => m.SelectedChapter).AddTo(CompositeDisposable);
+        SelectedChapterTimeCode = Model.ObserveProperty(m => m.DisplaySelectedChapterTimeCode)
+            .ToReadOnlyReactivePropertySlim()
+            .AddTo(CompositeDisposable);
+        CountDownTimer = Model.ToReactivePropertySlimAsSynchronized(m => m.CountdownSeconds).AddTo(CompositeDisposable);
 
-        var timer = Application.Current.Dispatcher.CreateTimer();
-        timer.Interval = TimeSpan.FromMilliseconds(10);
-        timer.Tick += (s, e) =>
+        MainTimer = Application.Current.Dispatcher.CreateTimer();
+        MainTimer.Interval = TimeSpan.FromMilliseconds(10);
+        MainTimer.Tick += (s, e) =>
         {
-            ElapsedTime = StopWatch.Elapsed;
-            DisplayTimeCode.Value =
-                $"{ElapsedTime.Hours:00}:{ElapsedTime.Minutes:00}:{ElapsedTime.Seconds:00}:{ElapsedTime.Milliseconds / 10:00}";
+            Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
+            Model.IncrementChapterTime(TimeSpan.FromMilliseconds(10));
         };
 
-        StartTimeCode = new ReactiveCommand();
+        InitButton();
+    }
+
+    /// <summary>
+    ///     ボタンの初期化。主にイベントハンドラー登録。
+    /// </summary>
+    private void InitButton()
+    {
+        // TODO: ReactiveCommandの非活性化を使ってボタンを押せないようにすると便利。
         StartTimeCode.Subscribe(_ =>
         {
-            if (IsRunning) return;
-            StopWatch.Start();
-            timer.Start();
-            IsRunning = true;
-        });
+            if (MainTimer.IsRunning) return;
+            MainTimer.Start();
+        }).AddTo(CompositeDisposable);
 
-        StopTimeCode = new ReactiveCommand();
         StopTimeCode.Subscribe(_ =>
         {
-            if (!IsRunning) return;
-            StopWatch.Stop();
-            timer.Stop();
-            IsRunning = false;
-        });
+            if (!MainTimer.IsRunning) return;
+            MainTimer.Stop();
+        }).AddTo(CompositeDisposable);
+
+        ResetTimeCode.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.ResetElapsedTime();
+        }).AddTo(CompositeDisposable);
+
+        AddChapter.Subscribe(_ => { Model.AddChapter(); }).AddTo(CompositeDisposable);
+        RemoveChapter.Subscribe(_ => { Model.RemoveChapter(); }).AddTo(CompositeDisposable);
+
+        IncrementHour.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromHours(1));
+        }).AddTo(CompositeDisposable);
+
+        IncrementMinute.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromMinutes(1));
+        }).AddTo(CompositeDisposable);
+
+        IncrementSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromSeconds(1));
+        }).AddTo(CompositeDisposable);
+
+        IncrementMilliSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.IncrementElapsedTime(TimeSpan.FromMilliseconds(10));
+        }).AddTo(CompositeDisposable);
+
+        DecrementHour.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromHours(1));
+        }).AddTo(CompositeDisposable);
+
+        DecrementMinute.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromMinutes(1));
+        }).AddTo(CompositeDisposable);
+
+        DecrementSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromSeconds(1));
+        }).AddTo(CompositeDisposable);
+
+        DecrementMilliSecond.Subscribe(_ =>
+        {
+            if (MainTimer.IsRunning) return;
+            Model.DecrementElapsedTime(TimeSpan.FromMilliseconds(10));
+        }).AddTo(CompositeDisposable);
+
+        ChangeChapterMode.Subscribe(_ => { ShowChapterTimeCode.Value = !ShowChapterTimeCode.Value; })
+            .AddTo(CompositeDisposable);
     }
 
     /// <summary>
@@ -49,35 +115,108 @@ public class MainPageViewModel : ViewModelBase
     /// </summary>
     private AppData Model { get; }
 
-    private bool IsRunning { get; set; }
-
     /// <summary>
-    ///     ストップウォッチ本体
+    ///     ストップウォッチ更新用タイマー
     /// </summary>
-    private Stopwatch StopWatch { get; }
-
-    /// <summary>
-    ///     表示用タイム
-    /// </summary>
-    private TimeSpan ElapsedTime { get; set; }
+    private IDispatcherTimer MainTimer { get; }
 
     /// <summary>
     ///     スタート
     /// </summary>
-    public ReactiveCommand StartTimeCode { get; }
+    public ReactiveCommand StartTimeCode { get; } = new();
 
     /// <summary>
     ///     ストップ
     /// </summary>
-    public ReactiveCommand StopTimeCode { get; }
+    public ReactiveCommand StopTimeCode { get; } = new();
+
+    /// <summary>
+    ///     リセット
+    /// </summary>
+    public ReactiveCommand ResetTimeCode { get; } = new();
 
     /// <summary>
     ///     総合タイム
     /// </summary>
-    public ReactivePropertySlim<string> DisplayTimeCode { get; set; }
+    public ReadOnlyReactivePropertySlim<string?> DisplayTimeCode { get; }
+
+    /// <summary>
+    ///     チャプタータイム
+    /// </summary>
+    public ReadOnlyReactivePropertySlim<string?> SelectedChapterTimeCode { get; }
+
+    /// <summary>
+    ///     加算：時
+    /// </summary>
+    public ReactiveCommand IncrementHour { get; } = new();
+
+    /// <summary>
+    ///     加算：分
+    /// </summary>
+    public ReactiveCommand IncrementMinute { get; } = new();
+
+    /// <summary>
+    ///     加算：秒
+    /// </summary>
+    public ReactiveCommand IncrementSecond { get; } = new();
+
+    /// <summary>
+    ///     加算：ミリ秒
+    /// </summary>
+    public ReactiveCommand IncrementMilliSecond { get; } = new();
+
+    /// <summary>
+    ///     減算：時
+    /// </summary>
+    public ReactiveCommand DecrementHour { get; } = new();
+
+    /// <summary>
+    ///     減算：分
+    /// </summary>
+    public ReactiveCommand DecrementMinute { get; } = new();
+
+    /// <summary>
+    ///     減算：秒
+    /// </summary>
+    public ReactiveCommand DecrementSecond { get; } = new();
+
+    /// <summary>
+    ///     減算：ミリ秒
+    /// </summary>
+    public ReactiveCommand DecrementMilliSecond { get; } = new();
 
     /// <summary>
     ///     チャプターリスト
     /// </summary>
     public ReadOnlyReactiveCollection<Chapter> ChapterList { get; }
+
+    /// <summary>
+    ///     チャプター追加
+    /// </summary>
+    public ReactiveCommand AddChapter { get; } = new();
+
+    /// <summary>
+    ///     チャプター削除
+    /// </summary>
+    public ReactiveCommand RemoveChapter { get; } = new();
+
+    /// <summary>
+    ///     選択中のチャプター
+    /// </summary>
+    public ReactivePropertySlim<Chapter> SelectedChapter { get; }
+
+    /// <summary>
+    ///     チャプターTC切り替えコマンド
+    /// </summary>
+    public ReactiveCommand ChangeChapterMode { get; } = new();
+
+    /// <summary>
+    ///     チャプターTCの表示・非表示
+    /// </summary>
+    public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new(true);
+    
+    /// <summary>
+    ///     カウントダウンタイマー
+    /// </summary>
+    public ReactivePropertySlim<int> CountDownTimer { get; }
 }
