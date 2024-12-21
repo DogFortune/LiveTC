@@ -1,7 +1,9 @@
 ﻿using LiveTC.Maui.Models;
 using LiveTC.Maui.ViewModels;
 using LiveTC.Maui.Views;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Hosting;
 
 namespace LiveTC.Maui;
 
