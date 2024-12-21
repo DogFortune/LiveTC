@@ -15,7 +15,8 @@ public class AppData : ObservableObject
 
         DisplayTimeCode = "00:00:00:00";
         DisplaySelectedChapterTimeCode = "00:00:00:00";
-        ElapsedTime = new TimeSpan();
+        ElapsedTime = TimeSpan.Zero;
+        CountdownSeconds = 5;
     }
 
     /// <summary>
@@ -136,7 +137,7 @@ public class AppData : ObservableObject
     /// <summary>
     ///     本編TC
     /// </summary>
-    public TimeSpan ElapsedTime
+    private TimeSpan ElapsedTime
     {
         get => _elapsedTime;
         set => SetProperty(ref _elapsedTime, value);
@@ -155,6 +156,17 @@ public class AppData : ObservableObject
             SetProperty(ref _selectedChapter, value);
             UpdateSelectedChapterTimeCode(SelectedChapter.TimeCode);
         }
+    }
+
+    private int _countdownSeconds;
+    
+    /// <summary>
+    ///     カウントダウンタイマー
+    /// </summary>
+    public int CountdownSeconds
+    {
+        get => _countdownSeconds;
+        set => SetProperty(ref _countdownSeconds, value);
     }
 
     /// <summary>

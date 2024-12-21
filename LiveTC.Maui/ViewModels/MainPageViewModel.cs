@@ -19,6 +19,7 @@ public class MainPageViewModel : ViewModelBase
         SelectedChapterTimeCode = Model.ObserveProperty(m => m.DisplaySelectedChapterTimeCode)
             .ToReadOnlyReactivePropertySlim()
             .AddTo(CompositeDisposable);
+        CountDownTimer = Model.ToReactivePropertySlimAsSynchronized(m => m.CountdownSeconds).AddTo(CompositeDisposable);
 
         MainTimer = Application.Current.Dispatcher.CreateTimer();
         MainTimer.Interval = TimeSpan.FromMilliseconds(10);
@@ -214,4 +215,9 @@ public class MainPageViewModel : ViewModelBase
     ///     チャプターTCの表示・非表示
     /// </summary>
     public ReactivePropertySlim<bool> ShowChapterTimeCode { get; } = new(true);
+    
+    /// <summary>
+    ///     カウントダウンタイマー
+    /// </summary>
+    public ReactivePropertySlim<int> CountDownTimer { get; }
 }
