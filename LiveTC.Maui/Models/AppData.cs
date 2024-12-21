@@ -153,6 +153,7 @@ public class AppData : ObservableObject
         get => _selectedChapter;
         set
         {
+            if (value == null) return;
             SetProperty(ref _selectedChapter, value);
             UpdateSelectedChapterTimeCode(SelectedChapter.TimeCode);
         }
