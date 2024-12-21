@@ -1,6 +1,5 @@
 using LiveTC.Maui.Models;
 using LiveTC.Maui.Models.Chapters;
-using Microsoft.Maui.Dispatching;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 

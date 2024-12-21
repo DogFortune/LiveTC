@@ -1,5 +1,4 @@
 ﻿using LiveTC.Maui.Views;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LiveTC.Maui;
 

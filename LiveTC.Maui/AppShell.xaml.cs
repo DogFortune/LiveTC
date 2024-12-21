@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace LiveTC.Maui;
+﻿namespace LiveTC.Maui;
 
 public partial class AppShell : Shell
 {
